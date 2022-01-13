@@ -1,4 +1,5 @@
 import React from "react";
+import {Typography} from "@mui/material";
 
 type Props = {
     innerText: string;
@@ -6,9 +7,9 @@ type Props = {
 
 function Test({innerText}: Props) {
     return (
-        <div>
+        <Typography sx={{ color: 'red' }} variant={"h3"} align={"center"}>
             {innerText}
-        </div>
+        </Typography>
     );
 }
 
