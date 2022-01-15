@@ -37,7 +37,7 @@ function LoginPage({email, handleChangeEmail, password, handleChangePassword, er
 
             <Button innerText={"Login"} callback={login}/>
 
-            <Button innerText={"Sign in"} callback={signIn}/>
+            <Button innerText={"Sign up"} callback={signIn}/>
         </div>
 
     )
