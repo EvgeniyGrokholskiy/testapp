@@ -4,5 +4,19 @@ body {
 }
 
 #reactMount {
+  margin: 50px auto;
   height: 100%;
+  width: 1440px;
+}
+
+.header__wrapper {
+  background-color: black;
+  height: 50px;
+}
+
+.header__navLink {
+  color: white;
+  line-height: 50px;
+  margin: 0 20px;
+  text-decoration: none;
 }

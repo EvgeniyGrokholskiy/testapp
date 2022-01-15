@@ -1,16 +1,16 @@
 import React from 'react';
 
 type Props = {
-    innerText: string,
-    handleClick: (flow:boolean) => void
+    innerText: string
+    callback?: () => void
 }
 
-function Button({innerText,handleClick}:Props) {
-    const flow = innerText === "Login"
+function Button({innerText, callback}: Props) {
 
     return (
-        <button onClick={()=>{
-            handleClick(flow)}}>{innerText}</button>
+        <button onClick={() => {
+            callback()
+        }}>{innerText}</button>
     );
 }
 
