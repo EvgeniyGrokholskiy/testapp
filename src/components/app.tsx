@@ -3,10 +3,10 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import Header from "./components/header/header";
-import Public from "./components/public/public";
-import Private from "./components/private/private";
-import LoginContainer from "./components/loginpage/loginContainer";
+import Header from "./header/header";
+import Public from "./public/public";
+import Private from "./private/private";
+import LoginContainer from "./loginpage/loginContainer";
 
 function App() {
 

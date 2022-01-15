@@ -7,7 +7,7 @@ import 'reset-css';
 import 'normalize.css';
 import 'styles.scss';
 
-import App from './app'
+import App from './components/app'
 
 const firebaseConfig = {
     apiKey: "AIzaSyDTLstUk3KREK9GfCM4uh-cMVQxnQjLkrk",

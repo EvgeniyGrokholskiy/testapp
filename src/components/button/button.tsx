@@ -8,7 +8,7 @@ type Props = {
 function Button({innerText, callback}: Props) {
 
     return (
-        <button onClick={() => {
+        <button className={'form__button'} onClick={() => {
             callback()
         }}>{innerText}</button>
     );
