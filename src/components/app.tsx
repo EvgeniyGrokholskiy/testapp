@@ -3,9 +3,9 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import Header from "./header/header";
-import Public from "./public/public";
-import Private from "./private/private";
+import Public from "./public";
+import Header from "./header";
+import Private from "./private";
 import LoginContainer from "./loginpage/loginContainer";
 
 function App() {

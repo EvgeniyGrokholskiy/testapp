@@ -1,10 +1,9 @@
-import Button from "../button/button";
-import {Typography} from "@mui/material";
+import Logout from "../logout";
+import LoginPage from "./loginPage";
 import React, {useEffect, useState} from 'react';
 import {getDatabase, ref, child, get, update} from "firebase/database";
 import {getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
-import LoginPage from "./loginPage";
-import Logout from "../logout/logout";
+
 
 function LoginContainer() {
 
