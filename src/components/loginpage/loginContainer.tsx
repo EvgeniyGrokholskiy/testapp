@@ -7,13 +7,12 @@ import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, sig
 
 const LoginContainer = () => {
 
-    const auth = getAuth();
     const [userState, setUserState] = useState({
-        uid: '', name: '', email: '', password: '', error: ''
+        isAuth: false ,uid: '', name: '', email: '', password: '', error: ''
     })
 
-    const clearInputs = () => {
-        setUserState({...userState, password: '', email: ''});
+    const setIsAuth = () => {
+        setUserState({...userState, isAuth: true});
     }
 
     const catchError = (error: { code: string, message: string }) => {
@@ -34,15 +33,15 @@ const LoginContainer = () => {
         setUserState({...userState, email, uid})
         sessionStorage.setItem('uid', uid);
         sessionStorage.setItem('auth', 'true');
-        clearInputs();
+        setIsAuth();
     }
 
     const setUserObj = ({email, password}: { email: string, password: string }) => {
-        setUserState({...userState, email, password});
+        setUserState({...userState, email, password, isAuth: true});
     }
 
     const login = () => {
-        //auth2.logIn(email,password,setUser,setError)
+        const auth = getAuth();
         signInWithEmailAndPassword(auth, userState.email, userState.password)
             .then((userCredential) => {
                 writeNewUser(userCredential.user.uid, userState.email, userState.password).then(() => console.log('written user data'));
@@ -54,7 +53,7 @@ const LoginContainer = () => {
     }
 
     const signUp = () => {
-        //auth2.signUp()
+        const auth = getAuth();
         setUserState({...userState, error: ''});
         createUserWithEmailAndPassword(auth, userState.email, userState.password)
             .then((userCredential) => {
@@ -67,10 +66,11 @@ const LoginContainer = () => {
     }
 
     const logout = () => {
+        const auth = getAuth();
         signOut(auth).then(() => {
             sessionStorage.setItem('uid', '');
             sessionStorage.setItem('auth', '');
-            setUserState({...userState, name: '', email: '', password: ''});
+            setUserState({...userState, name: '', email: '', password: '',isAuth: false});
         }).catch((error) => {
             catchError(error);
         });
@@ -79,8 +79,8 @@ const LoginContainer = () => {
     const writeNewUser = (uid: any, email: string, password: string) => {
         const db = getDatabase();
         const user = {
-            email: userState.email,
-            password: userState.password
+            email: email,
+            password: password
         };
         const updates: { [uid: string]: { email: string, password: string } } = {}
         updates[uid] = user;
@@ -104,7 +104,7 @@ const LoginContainer = () => {
 
     useEffect(() => {
         getUserData()
-    }, [userState.name, userState.email])
+    }, [userState.isAuth, userState.email])
 
     return (
         <>
