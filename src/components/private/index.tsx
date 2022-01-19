@@ -4,7 +4,7 @@ function Private() {
     return (
         <div>
             {
-                localStorage.getItem('uid') !== '' ?
+                sessionStorage.getItem('uid') !== '' ?
                     <>
                         private page
                     </>

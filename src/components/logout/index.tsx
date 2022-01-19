@@ -7,7 +7,7 @@ interface Props {
     email: string
     password: string
     error: string
-    logout: () => void
+    logout: (auth?:any) => void
 }
 
 function Logout({name, email, password, error, logout}: Props) {

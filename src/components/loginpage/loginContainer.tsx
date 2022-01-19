@@ -1,57 +1,51 @@
 import Logout from "../logout";
 import LoginPage from "./loginPage";
 import React, {useEffect, useState} from 'react';
-import {getDatabase, ref, child, get, update} from "firebase/database";
-import {getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import {child, get, getDatabase, ref, update} from "firebase/database";
+import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth";
 
 
-function LoginContainer() {
+const LoginContainer = () => {
 
     const auth = getAuth();
-    const [uid, setUid] = useState('');
-    const [name, setName] = useState('');
-    const [error, setError] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [userState, setUserState] = useState({
+        uid: '', name: '', email: '', password: '', error: ''
+    })
 
     const clearInputs = () => {
-        setEmail('');
-        setPassword('');
+        setUserState({...userState, password: '', email: ''});
     }
 
-    const catchError = (error: any) => {
+    const catchError = (error: { code: string, message: string }) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        setError(errorMessage);
+        setUserState({...userState, error: errorMessage})
     }
 
     const handleChangeEmail = (event: any) => {
-        setEmail(event.currentTarget.value);
-        setError('')
+        setUserState({...userState, email: event.currentTarget.value, error: ''})
     }
 
     const handleChangePassword = (event: any) => {
-        setPassword(event.currentTarget.value);
-        setError('')
+        setUserState({...userState, password: event.currentTarget.value, error: ''})
     }
 
     const setUser = ({email, uid}: { email: string, uid: string }) => {
-        setName(email);
-        setUid(uid);
-        localStorage.setItem('uid', uid);
-        localStorage.setItem('auth', 'true');
+        setUserState({...userState, email, uid})
+        sessionStorage.setItem('uid', uid);
+        sessionStorage.setItem('auth', 'true');
         clearInputs();
     }
 
     const setUserObj = ({email, password}: { email: string, password: string }) => {
-        setEmail(email);
-        setPassword(password)
+        setUserState({...userState, email, password});
     }
 
     const login = () => {
-        signInWithEmailAndPassword(auth, email, password)
+        //auth2.logIn(email,password,setUser,setError)
+        signInWithEmailAndPassword(auth, userState.email, userState.password)
             .then((userCredential) => {
-                writeNewUser(userCredential.user.uid, email, password).then(() => console.log('written user data'));
+                writeNewUser(userCredential.user.uid, userState.email, userState.password).then(() => console.log('written user data'));
                 setUser(userCredential.user);
             })
             .catch((error) => {
@@ -59,11 +53,12 @@ function LoginContainer() {
             });
     }
 
-    const signIn = () => {
-        setError('');
-        createUserWithEmailAndPassword(auth, email, password)
+    const signUp = () => {
+        //auth2.signUp()
+        setUserState({...userState, error: ''});
+        createUserWithEmailAndPassword(auth, userState.email, userState.password)
             .then((userCredential) => {
-                writeNewUser(userCredential.user.uid, email, password).then(() => console.log('written user data'));
+                writeNewUser(userCredential.user.uid, userState.email, userState.password).then(() => console.log('written user data'));
                 setUser(userCredential.user);
             })
             .catch((error) => {
@@ -73,30 +68,28 @@ function LoginContainer() {
 
     const logout = () => {
         signOut(auth).then(() => {
-            localStorage.setItem('uid', '');
-            localStorage.setItem('auth', '');
-            setName('');
-            setEmail('');
-            setPassword('');
+            sessionStorage.setItem('uid', '');
+            sessionStorage.setItem('auth', '');
+            setUserState({...userState, name: '', email: '', password: ''});
         }).catch((error) => {
             catchError(error);
         });
     }
 
-    function writeNewUser(uid: any, email: string, password: string) {
+    const writeNewUser = (uid: any, email: string, password: string) => {
         const db = getDatabase();
         const user = {
-            email,
-            password
+            email: userState.email,
+            password: userState.password
         };
         const updates: { [uid: string]: { email: string, password: string } } = {}
         updates[uid] = user;
         return update(ref(db), updates);
     }
 
-    useEffect(() => {
+    const getUserData = () => {
         const dbRef = ref(getDatabase());
-        const path = localStorage.getItem('uid');
+        const path = sessionStorage.getItem('uid');
         if (path === '') return
         get(child(dbRef, `/${path}`)).then((snapshot) => {
             if (snapshot.exists()) {
@@ -107,29 +100,32 @@ function LoginContainer() {
         }).catch((error) => {
             console.error(error);
         });
+    }
 
-    }, [auth,name,email])
+    useEffect(() => {
+        getUserData()
+    }, [userState.name, userState.email])
 
     return (
         <>
             {
-                localStorage.getItem('auth') === '' ?
+                sessionStorage.getItem('auth') === '' ?
 
-                    <LoginPage email={email}
+                    <LoginPage email={userState.email}
                                handleChangeEmail={handleChangeEmail}
-                               password={password}
+                               password={userState.password}
                                handleChangePassword={handleChangePassword}
-                               error={error}
+                               error={userState.error}
                                login={login}
-                               signIn={signIn}
+                               signIn={signUp}
                     />
 
                     :
 
-                    <Logout name={email}
-                            email={email}
-                            password={password}
-                            error={error} logout={logout}
+                    <Logout name={userState.email}
+                            email={userState.email}
+                            password={userState.password}
+                            error={userState.error} logout={logout}
                     />
 
             }
