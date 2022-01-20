@@ -6,7 +6,7 @@ import {
 import Public from "./public";
 import Header from "./header";
 import Private from "./private";
-import LoginContainer from "./loginpage/loginContainer";
+import LoginClassContainer from "./loginpage/loginContainer";
 
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
             <Routes>
                 <Route path={'/Public'} element={<Public/>}/>
                 <Route path={'/Private'} element={<Private/>}/>
-                <Route path={'/'} element={<LoginContainer/>}/>
+                <Route path={'/'} element={<LoginClassContainer/>}/>
             </Routes>
         </main>
     );

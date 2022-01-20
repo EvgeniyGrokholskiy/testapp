@@ -42,7 +42,7 @@ export class Auth implements IAuth {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, login, password)
             .then((userCredential) => {
-                this.writeNewUser(userCredential.user.uid, login, password).then(() => console.log('written user data'));
+                //this.writeNewUser(userCredential.user.uid, login, password).then(() => console.log('written user data'));
                 setUser(userCredential.user);
             })
             .catch((error) => {
