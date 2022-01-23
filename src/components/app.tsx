@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import {
     Routes,
     Route
@@ -9,7 +9,7 @@ import Private from "./private";
 import LoginClassContainer from "./loginpage/loginContainer";
 
 
-function App() {
+function App(props:any): ReactElement<any, any>{
 
     return (
         <main>
@@ -17,7 +17,7 @@ function App() {
             <Routes>
                 <Route path={'/Public'} element={<Public/>}/>
                 <Route path={'/Private'} element={<Private/>}/>
-                <Route path={'/'} element={<LoginClassContainer/>}/>
+                <Route path={'/'} element={<LoginClassContainer />}/>
             </Routes>
         </main>
     );

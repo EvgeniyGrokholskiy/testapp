@@ -23,7 +23,7 @@ window.addEventListener('drop', (e) => {
 
 ReactDOM.render(
     <BrowserRouter>
-      <App />
+      <App/>
     </BrowserRouter>,
   document.getElementById('reactMount'),
 );

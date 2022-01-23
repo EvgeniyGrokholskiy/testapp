@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import Button from "../button";
 import {Typography} from "@mui/material";
 
@@ -7,10 +7,10 @@ interface Props {
     email: string
     password: string
     error: string
-    logout: (auth?:any) => void
+    logout: (auth?: any) => void
 }
 
-function Logout({name, email, password, error, logout}: Props) {
+function Logout({name, email, password, error, logout}: Props): ReactElement<any, any> {
 
     return (
 

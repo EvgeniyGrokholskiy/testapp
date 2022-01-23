@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactElement} from 'react';
 import Button from "../button";
 import {Typography} from "@mui/material";
 
@@ -14,7 +14,7 @@ interface Props {
     signIn: Function
 }
 
-function LoginPage({email, handleChangeEmail, password, handleChangePassword, error, login, signIn}: Props) {
+function LoginPage({email, handleChangeEmail, password, handleChangePassword, error, login, signIn}: Props): ReactElement<any, any> {
 
     return (
 
