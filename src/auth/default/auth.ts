@@ -1,24 +1,27 @@
 import {IAuth} from "../index";
 import {db} from "../../db/default/db";
 import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth";
+import {Subject} from "rxjs";
 
 
-class Auth implements IAuth {
+class AuthDefault implements IAuth {
 
     readonly authObservably: boolean;
-    //private _auth;
-    constructor() {
-        //this._auth = getAuth()
+    private auth: any;
+    private subject = new Subject<boolean>();
 
+    get status(): boolean {
+        this.auth = getAuth()
+        debugger
+        return this.auth.CurrentUser != null
     }
 
     logIn(email: string, password: string): Promise<any> {
-        debugger
         const auth = getAuth();
         return signInWithEmailAndPassword(auth, email, password);
     }
 
-    logOut():Promise<void> {
+    logOut(): Promise<void> {
         const auth = getAuth();
         return signOut(auth);
     }
@@ -32,9 +35,11 @@ class Auth implements IAuth {
             })
     }
 
-    observable(): boolean {
-        return false;
+    observable(): any {
+        return this.subject;
     }
+
+
 }
 
-export const auth = new Auth;
+export const auth = new AuthDefault;

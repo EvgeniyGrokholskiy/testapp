@@ -1,4 +1,3 @@
-import React, {ReactElement} from 'react';
 import {
     Routes,
     Route
@@ -6,6 +5,7 @@ import {
 import Public from "./public";
 import Header from "./header";
 import Private from "./private";
+import React, {ReactElement} from 'react';
 import LoginClassContainer from "./loginpage/loginContainer";
 
 

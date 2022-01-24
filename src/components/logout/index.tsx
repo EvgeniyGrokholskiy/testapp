@@ -1,6 +1,6 @@
-import React, {ReactElement} from 'react';
 import Button from "../button";
 import {Typography} from "@mui/material";
+import React, {ReactElement} from 'react';
 
 interface Props {
     name: string
