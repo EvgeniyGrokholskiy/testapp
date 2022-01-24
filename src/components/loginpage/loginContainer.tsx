@@ -1,7 +1,8 @@
 import Logout from "../logout";
-import {Auth} from "../../auth";
 import LoginPage from "./loginPage";
+import {db} from "../../db/default/db";
 import React, {ReactElement} from 'react';
+import {auth} from "../../auth/default/auth";
 
 interface IState {
     isAuth: boolean,
@@ -55,7 +56,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     }
 
     login = () => {
-        Auth.logIn(this.state.email, this.state.password)
+        auth.logIn(this.state.email, this.state.password)
             .then((data: any) => {
                 this.setUser(data.user);
             }).catch((error: any) => {
@@ -65,7 +66,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
 
     signUp = () => {
         this.setState({error: ''});
-        Auth.signUp(this.state.email, this.state.password)
+        auth.signUp(this.state.email, this.state.password)
             .then((userCredential) => {
                 this.setUser(userCredential.user);
             })
@@ -75,7 +76,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     }
 
     logout = () => {
-        Auth.logOut().then(() => {
+        auth.logOut().then(() => {
             sessionStorage.setItem('uid', null);
             sessionStorage.setItem('auth', null);
             this.setState({name: '', email: '', password: '', isAuth: false});
@@ -85,8 +86,9 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     }
 
     componentDidMount() {
-        Auth.getUserData().then((data) => {
-            if (data[this.state.uid]) {
+        if (!sessionStorage.getItem("uid")) return
+        db.getUserData().then((data) => {
+            if (data) {
                 this.setUserObj(data);
             } else {
                 this.logout()
@@ -98,7 +100,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
 
     render(): ReactElement {
 
-        const conditionalRender = this.state.isAuth
+        const conditionalRender = (sessionStorage.getItem("auth") === "true") || this.state.isAuth
 
         return (
             <>
