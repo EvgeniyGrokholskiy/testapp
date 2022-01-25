@@ -1,7 +1,13 @@
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut
+} from "firebase/auth";
+import {Subject} from "rxjs";
 import {IAuth} from "../index";
 import {db} from "../../db/default/db";
-import {createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut} from "firebase/auth";
-import {Subject} from "rxjs";
 
 
 class AuthDefault implements IAuth {
@@ -12,9 +18,20 @@ class AuthDefault implements IAuth {
 
     get status(): boolean {
         this.auth = getAuth()
-        debugger
-        return this.auth.CurrentUser != null
+        return this.auth.CurrentUser !== null
     }
+
+    isAuth() {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                this.subject.next(true)
+            } else {
+                this.subject.next(false)
+            }
+        });
+    }
+
 
     logIn(email: string, password: string): Promise<any> {
         const auth = getAuth();
