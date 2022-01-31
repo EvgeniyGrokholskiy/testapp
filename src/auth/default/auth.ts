@@ -8,22 +8,28 @@ import {
 import {Subject} from "rxjs";
 import {IAuth} from "../index";
 import {db} from "../../db/default/db";
+import {initializeApp} from "firebase/app";
+import {IFirebaseconfig} from "../../firebaseconfig";
 
 
 class AuthDefault implements IAuth {
 
     readonly authObservably: boolean;
-    private auth: any;
+    private readonly auth: any;
     private subject = new Subject<boolean>();
 
-    get status(): boolean {
+
+    constructor(firebaseConfig: IFirebaseconfig) {
+        const app = initializeApp(firebaseConfig);
         this.auth = getAuth()
+    }
+
+    get status(): boolean {
         return this.auth.CurrentUser !== null
     }
 
     isAuth() {
-        const auth = getAuth();
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(this.auth, (user) => {
             if (user) {
                 this.subject.next(true)
             } else {
@@ -32,20 +38,16 @@ class AuthDefault implements IAuth {
         });
     }
 
-
     logIn(email: string, password: string): Promise<any> {
-        const auth = getAuth();
-        return signInWithEmailAndPassword(auth, email, password);
+        return signInWithEmailAndPassword(this.auth, email, password);
     }
 
     logOut(): Promise<void> {
-        const auth = getAuth();
-        return signOut(auth);
+        return signOut(this.auth);
     }
 
     signUp(email: string, password: string): Promise<any> {
-        const auth = getAuth();
-        return createUserWithEmailAndPassword(auth, email, password)
+        return createUserWithEmailAndPassword(this.auth, email, password)
             .then((userCredential) => {
                 db.writeNewUser(userCredential.user.uid, email, password).then((data) => console.log(`written user data: ${data}`));
                 return userCredential;
@@ -55,8 +57,6 @@ class AuthDefault implements IAuth {
     observable(): any {
         return this.subject;
     }
-
-
 }
 
-export const auth = new AuthDefault;
+export default AuthDefault;

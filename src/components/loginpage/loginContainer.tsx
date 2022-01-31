@@ -1,8 +1,10 @@
 import Logout from "../logout";
+import {IAuth} from "../../auth";
 import LoginPage from "./loginPage";
 import {db} from "../../db/default/db";
 import React, {ReactElement} from 'react';
-import {auth} from "../../auth/default/auth";
+import { auth } from "di-default";
+
 
 interface IState {
     isAuth: boolean,
@@ -18,9 +20,11 @@ interface IProps {
 }
 
 class LoginClassContainer extends React.Component<IProps, IState> {
+    private auth: IAuth;
 
     constructor(props: any) {
         super(props);
+        this.auth = auth()
         this.state = {
             isAuth: false,
             uid: '',
@@ -56,7 +60,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     }
 
     login = () => {
-        auth.logIn(this.state.email, this.state.password)
+        this.auth.logIn(this.state.email, this.state.password)
             .then((data: any) => {
                 this.setUser(data.user);
             }).catch((error: any) => {
@@ -66,7 +70,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
 
     signUp = () => {
         this.setState({error: ''});
-        auth.signUp(this.state.email, this.state.password)
+        this.auth.signUp(this.state.email, this.state.password)
             .then((userCredential) => {
                 this.setUser(userCredential.user);
             })
@@ -76,7 +80,7 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     }
 
     logout = () => {
-        auth.logOut().then(() => {
+        this.auth.logOut().then(() => {
             sessionStorage.setItem('uid', null);
             sessionStorage.setItem('auth', null);
             this.setState({name: '', email: '', password: '', isAuth: false});

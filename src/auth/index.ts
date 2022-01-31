@@ -6,6 +6,6 @@ export interface IAuth {
     isAuth: () => void
     signUp: LoginFunc;
     logIn: LoginFunc;
-    logOut: () => void;
+    logOut: () => Promise<any>;
     observable: () => boolean;
 }
