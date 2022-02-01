@@ -1,3 +1,4 @@
+import { IDb } from "db";
 import {child, get, getDatabase, ref, update} from "firebase/database";
 
 class Db implements IDb {
