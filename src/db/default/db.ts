@@ -3,6 +3,12 @@ import {child, get, getDatabase, ref, update} from "firebase/database";
 
 class Db implements IDb {
 
+    getEmail(email:string):string {
+        const indexOf = email.indexOf("@")
+        const result = email.slice(0,indexOf)
+        return result
+    }
+
     getUserData() {
         const dbRef = ref(getDatabase());
         const path = sessionStorage.getItem('uid');

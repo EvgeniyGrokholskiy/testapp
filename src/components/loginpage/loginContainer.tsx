@@ -71,8 +71,8 @@ class LoginClassContainer extends React.Component<IProps, IState> {
     signUp = () => {
         this.setState({error: ''});
         this.auth.signUp(this.state.email, this.state.password)
-            .then((userCredential) => {
-                this.setUser(userCredential.user);
+            .then((data) => {
+                this.setUser(data.user);
             })
             .catch((error) => {
                 this.catchError(error);

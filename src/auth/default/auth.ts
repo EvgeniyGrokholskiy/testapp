@@ -49,7 +49,10 @@ class AuthDefault implements IAuth {
     signUp(email: string, password: string): Promise<any> {
         return createUserWithEmailAndPassword(this.auth, email, password)
             .then((userCredential) => {
-                db.writeNewUser(userCredential.user.uid, email, password).then((data) => console.log(`written user data: ${data}`));
+                db.writeNewUser(userCredential.user.uid, email, password).then((data) => {
+                        //console.log(`written user data: ${data}`)
+                    }
+                );
                 return userCredential;
             })
     }
