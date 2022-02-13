@@ -1,10 +1,13 @@
-import React from 'react';
+import React from "react";
 
 function Private() {
+    const uid = sessionStorage.getItem("uid");
+    const conditionalRender = uid !== null
+
     return (
         <div>
             {
-                sessionStorage.getItem('uid') !== '' ?
+                conditionalRender ?
                     <>
                         private page
                     </>
